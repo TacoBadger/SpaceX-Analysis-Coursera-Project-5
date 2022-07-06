@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Tommy/Desktop/SpaceX/SQL SpaceX.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="1860"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,6:mainSpacex"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Spacex" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="91"/><column index="2" value="101"/><column index="3" value="152"/><column index="4" value="116"/><column index="5" value="300"/><column index="6" value="210"/><column index="7" value="87"/><column index="8" value="300"/><column index="9" value="252"/><column index="10" value="175"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- Display the names of the unique launch sites in the space mission
+ select distinct(LAUNCH_SITE) from Spacex
+ 
+--  Display 5 records where launch sites begin with the string 'CCA'
+select * from Spacex where LAUNCH_SITE like 'CCA%' limit 5
+
+-- Display the total payload mass carried by boosters launched by NASA (CRS)
+select sum(PAYLOAD_MASS__KG_) from Spacex where CUSTOMER = 'NASA (CRS)'
+
+-- Display average payload mass carried by booster version F9 v1.1
+select avg(PAYLOAD_MASS__KG_) from Spacex where BOOSTER_VERSION = 'F9 v1.1'
+
+-- List the date when the first succesful landing outcome in ground pad was acheived.
+select min(DATE) from Spacex where Landing_Outcome = 'Success (ground pad)'
+
+-- List the names of the boosters which have success in drone ship and have payload mass greater than 4000 but less than 6000
+select BOOSTER_VERSION from Spacex where Landing_Outcome = 'Success (drone ship)' and PAYLOAD_MASS__KG_ &gt; 4000 and PAYLOAD_MASS__KG_ &lt; 6000
+
+-- List the total number of successful and failure mission outcomes
+select count(MISSION_OUTCOME) from Spacex where MISSION_OUTCOME = 'Success' or MISSION_OUTCOME = 'Failure (in flight)'
+
+-- List the names of the booster_versions which have carried the maximum payload mass. Use a subquery
+select BOOSTER_VERSION from Spacex where PAYLOAD_MASS__KG_ = (select max(PAYLOAD_MASS__KG_) from Spacex)
+
+-- List the records which will display the month names, failure landing_outcomes in drone ship ,booster versions, launch_site for the months in year 2015
+SELECT EXTRACT(MONTH, SELECT min(DATE) from Spacex where Landing_Outcome = 'Success (ground pad)')
+
+-- Rank the count of successful landing_outcomes between the date 2010-06-04 and 2017-03-20 in descending order.
+select * from Spacex where Landing_Outcome like 'Success%' and (DATE between '2010-06-04' and '2017-03-20') order by date desc
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
